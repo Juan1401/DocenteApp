@@ -205,6 +205,10 @@ namespace DocenteApp
 
         private async void NavegarOlvidoContra_Tapped(object sender, EventArgs e)
         {
+
+            loading.IsVisible = true;
+            await Task.Delay(500);
+            loading.IsVisible = false;
             await Navigation.PushAsync(new OlvidoPassword());
         }
 
@@ -228,7 +232,6 @@ namespace DocenteApp
          
             if (String.IsNullOrEmpty(entryIdentificacion.Text))
             {
-
                 loading.IsVisible = true;
                 await Task.Delay(450);
                 loading.IsVisible = false;
@@ -243,7 +246,7 @@ namespace DocenteApp
                 loading.IsVisible = false;
                 await DisplayAlert("Advertencia", "El campo No. Documento debe tener maximo 10 digitos", "Aceptar");
             }
-
+            
             if (String.IsNullOrEmpty(entryCodigoEstudiante.Text))
             {
                 loading.IsVisible = true;
@@ -252,13 +255,24 @@ namespace DocenteApp
                 await DisplayAlert("Advertencia", "El campo Código estudiante esta vacio", "Aceptar");
                 return;
             }
-        
+
+            bool ValidarDocumento_Nu = val.ValidarDocumento_Nu(entryCodigoEstudiante);
+            if (ValidarDocumento_Nu) 
+            {
+                loading.IsVisible = true;
+                await Task.Delay(450);
+                loading.IsVisible = false;
+                await DisplayAlert("Advertencia", "El campo Código estudiante solo recibe 'Numeros'.", "Aceptar");
+                return;
+            }
+
             if (String.IsNullOrEmpty(entryContraseña.Text))
             {
                 loading.IsVisible = true;
                 await Task.Delay(450);
                 loading.IsVisible = false;
                 await DisplayAlert("Advertencia", "El campo Contraseña esta vacio", "Aceptar");
+                return;
             }
             bool ValidarPassword = val.ValidarPassword(entryContraseña);
             if (!ValidarPassword)
@@ -267,8 +281,8 @@ namespace DocenteApp
                 await Task.Delay(450);
                 loading.IsVisible = false;
                 await DisplayAlert("Advertencia", "El campo Contraseña debe tener al menos 8 caracteres", "Aceptar");
+                return;
             }
-
             else {
                 loading.IsVisible = true;
                 await Task.Delay(500);
