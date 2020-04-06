@@ -128,7 +128,6 @@ namespace DocenteApp
             ButtonRecuperar.Clicked += ButtonRecuperar_Clicked;
             tabButtonRecuperar.Tapped += TabButtonRecuperar_Tapped;
             tabIconBack.Tapped += TabIconBack_Tapped;
-
         }
 
         private async void TabIconBack_Tapped(object sender, EventArgs e)
@@ -162,7 +161,6 @@ namespace DocenteApp
                 await DisplayAlert("Advertencia", "El campo Correo no es una dirrección Valida", "Aceptar");
                 return;
             }
-
             if (!CorreoRecuperacion.Text.Contains("@"))
             {
                 loading.IsVisible = true;

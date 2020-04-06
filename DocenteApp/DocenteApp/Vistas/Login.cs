@@ -241,7 +241,8 @@ namespace DocenteApp
                 loading.IsVisible = true;
                 await Task.Delay(450);
                 loading.IsVisible = false;
-                await DisplayAlert("Advertencia", "El campo No. Documento debe tener maximo 10 digitos", "Aceptar");
+                await DisplayAlert("Advertencia", "El campo No. Documento debe tener solo 10 digitos", "Aceptar");
+                return;
             }
 
             if (String.IsNullOrEmpty(entryCodigoEstudiante.Text))
