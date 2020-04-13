@@ -19,7 +19,7 @@ namespace DocenteApp
             Loading = new ActivityIndicator
             {
                 IsRunning = true,
-                Color = Colores.Color_Navegation,
+                Color = Colores.Color_Textos,
             };
           
             Children.Add(Loading,

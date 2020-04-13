@@ -10,7 +10,6 @@ namespace DocenteApp
     {
         public bool VerificarCorreo(Entry usuario)
         {
-
             if (String.IsNullOrEmpty(usuario.Text))
             {
                 return true;
@@ -25,7 +24,6 @@ namespace DocenteApp
                 return true;
             }
             //FIN
-
             else
                 return false;
         }
@@ -83,10 +81,5 @@ namespace DocenteApp
             else
                 return false;
         }
-
-
-
-
-
     }
 }

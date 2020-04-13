@@ -228,6 +228,14 @@ namespace DocenteApp
             //await buttonIniciar.ScaleTo(0.95, Tiempo); //cuando el boton es cuando el boton esta en el cero porciento "presionado"
             //await buttonIniciar.ScaleTo(1, Tiempo); //Aqui va tomar el valor completo del boton 
 
+
+
+            //bool respuesta = DependencyService.Get<IRestApi>().CreateClients();
+            //if (respuesta)
+            //    await paginaPrincipal.TranslateTo(0, 0, 500);
+            //else
+            //    await DisplayAlert("Notificación", "Problemas para la conexión con el servidor", "Aceptar");
+
             Validaciones val = new Validaciones();
          
             if (String.IsNullOrEmpty(entryIdentificacion.Text))

@@ -178,7 +178,7 @@ namespace DocenteApp
 
 
         }
-        private async void ImageTap_Tapped(object sender, EventArgs e)
+        private void ImageTap_Tapped(object sender, EventArgs e)
         {
             AnimacionSaltoBoton((View)sender);
         }
