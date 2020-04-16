@@ -7,11 +7,17 @@ using Xamarin.Forms;
 
 namespace DocenteApp
 {
-    public class App : Application
+    public class App : Application   //"Aplicacion conecta todos los 3 proyectos"
     {
+
+        public static MasterPage _masterPage;
         public App()
         {
-            MainPage = new NavigationPage(new Login());
+            MainPage = new Login();
+            
+            _masterPage = new MasterPage();
+
+            MainPage = new NavigationPage(new Login());  ///Para navegar entra páginas
         }
     }
 }

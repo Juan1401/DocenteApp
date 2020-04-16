@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Xamarin.Forms;
 
@@ -9,7 +10,6 @@ namespace DocenteApp
     {
         public bool VerificarCorreo(Entry usuario)
         {
-
             if (String.IsNullOrEmpty(usuario.Text))
             {
                 return true;
@@ -24,7 +24,6 @@ namespace DocenteApp
                 return true;
             }
             //FIN
-
             else
                 return false;
         }
@@ -69,7 +68,18 @@ namespace DocenteApp
                 return false; //Finish
         }
 
-
-
+        public bool ValidarDocumento_Nu(Entry Documento_Nu)
+        {
+            if (String.IsNullOrEmpty(Documento_Nu.Text))
+            {
+                return true;
+            }
+            if (!Documento_Nu.Text.ToCharArray().All(Char.IsDigit))
+            {
+                return true;
+            }
+            else
+                return false;
+        }
     }
 }
