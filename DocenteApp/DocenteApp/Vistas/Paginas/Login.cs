@@ -10,7 +10,7 @@ namespace DocenteApp
 
     public class Login : ContentPage
     {
-        Image LogoUTAP,IconoBack,ImageBackOlvidoContraseña;
+        Image LogoUTAP,ImageBackOlvidoContraseña;
 
         Label labeLBienvenido;
 
@@ -30,13 +30,8 @@ namespace DocenteApp
         RelativeLayout ContenedorPrincipal;
 
         BoxView Circulo;
-
-        //30/03/2020
-        PaginaPrincipal paginaPrincipal; //30/03/2020
      
-        TapGestureRecognizer ImageBack; //declaramos gesto 
         TapGestureRecognizer NavegarOlvidoContra; //declaramos gesto 
-
 
         //Añadir Modelo para los colores y tamaño de texto.
         //No posicionar con Stacklayout o Relative Por Ahora.
@@ -52,33 +47,23 @@ namespace DocenteApp
         {
             loading = new Cargando();
 
-            IconoBack = new Image
-            {
-                Source = Imagenes.IconoBack,
-                IsVisible = false
-            };
-
+ 
             ImageBackOlvidoContraseña = new Image
             {
-                Source = Imagenes.IconoBack,
+                Source = Core.IconoBack,
                 IsVisible = false
-            };
-
-            paginaPrincipal = new PaginaPrincipal
-            {
-                TranslationX = 420
             };
 
             LogoUTAP = new Image
             {
-                Source = Imagenes.LogoUtap
+                Source = Core.LogoUtap
             };
 
             BoxviewDiseño = new BoxView
             {
                 Color = Colores.Color_Navegation
             };
-
+            
             labeLBienvenido = new Label
             {
                 Text = " Bienvenidos ",
@@ -90,7 +75,7 @@ namespace DocenteApp
 
             labelOlvidoContraseña = new Label
             {
-                Text = " ¿Olvido Su Contraseña? ",
+                Text = " ¿Olvidaste tú contraseña? ",
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.Center,
                 TextColor = Colores.Color_Titulos,
@@ -125,7 +110,7 @@ namespace DocenteApp
             buttonIniciar = new Button
             {
                 Text = "Acceder a la App",
-                BackgroundColor = Color.FromHex("FFFFF"),
+                BackgroundColor = Color.FromHex("FFFFFF"),
                 TextColor = Colores.Color_TextosSecundario,
                 //Scale = 6  "El boton se pone 6 veces mas grande que el original" 
             };
@@ -148,12 +133,8 @@ namespace DocenteApp
 
             buttonIniciar.Clicked += ButtonIniciar_Clicked; //evento para animación  24-02-2020
             
-            ImageBack = new TapGestureRecognizer();
-            IconoBack.GestureRecognizers.Add(ImageBack);
-
             NavegarOlvidoContra = new TapGestureRecognizer();
             labelOlvidoContraseña.GestureRecognizers.Add(NavegarOlvidoContra);
-
         }
         void AgregarVistas()
         {
@@ -164,7 +145,6 @@ namespace DocenteApp
             VistaGeneral.Children.Add(entryContraseña);
             VistaGeneral.Children.Add(BoxviewDiseño);
             VistaGeneral.Children.Add(buttonIniciar);
-            VistaGeneral.Children.Add(labelOlvidoContraseña);
             Content = VistaGeneral;
 
             ContenedorPrincipal.Children.Add(VistaGeneral,
@@ -173,19 +153,14 @@ namespace DocenteApp
             Constraint.RelativeToParent((p) => { return 320; }));  //W  
 
             //Declarlos en el orden en que quiero que aparezca 
+            ContenedorPrincipal.Children.Add(labelOlvidoContraseña,
+            Constraint.RelativeToParent((p) => { return p.Width * 0.25; }),  //X    
+            Constraint.RelativeToParent((p) => { return p.Height * 0.88; })); //Y  
+
+            //Declarlos en el orden en que quiero que aparezca 
             ContenedorPrincipal.Children.Add(Circulo,
             Constraint.RelativeToParent((p) => { return p.Width * 0.45; }),  //X    
             Constraint.RelativeToParent((p) => { return p.Height * 0.45; })); //H   
-
-            ContenedorPrincipal.Children.Add(paginaPrincipal,
-            Constraint.RelativeToParent((p) => { return 0; }),  //X
-            Constraint.RelativeToParent((p) => { return 0; }), //Y
-            Constraint.RelativeToParent((p) => { return p.Width; }),  //W  
-            Constraint.RelativeToParent((p) => { return p.Height; }));  //H  
-
-            ContenedorPrincipal.Children.Add(IconoBack,
-            Constraint.RelativeToParent((p) => { return p.Width * 0; }),  //X    
-            Constraint.RelativeToParent((p) => { return p.Height * 0; })); //Y   
 
             ContenedorPrincipal.Children.Add(loading,
             Constraint.RelativeToParent((p) => { return 0; }),  //X
@@ -193,13 +168,11 @@ namespace DocenteApp
             Constraint.RelativeToParent((p) => { return p.Width; }),  //W   
             Constraint.RelativeToParent((p) => { return p.Height; })); //H
 
-
             Content = ContenedorPrincipal;
         }
 
         void AgregarEventos()
         {
-            ImageBack.Tapped += ImageBack_Tapped;  //Back para pagina principal
             NavegarOlvidoContra.Tapped += NavegarOlvidoContra_Tapped;
         }
 
@@ -212,14 +185,6 @@ namespace DocenteApp
             await Navigation.PushAsync(new OlvidoPassword());
         }
 
-        private async void ImageBack_Tapped(object sender, EventArgs e)
-        {
-            loading.IsVisible = true;
-            await Task.Delay(500);
-            loading.IsVisible = false;
-            await paginaPrincipal.TranslateTo(420, 0, 200);
-            IconoBack.IsVisible = false;
-        }
 
         private async void ButtonIniciar_Clicked(object sender, EventArgs e) //animación del boton 24-02-2020
         {
@@ -244,6 +209,7 @@ namespace DocenteApp
                 await Task.Delay(450);
                 loading.IsVisible = false;
                 await DisplayAlert("Advertencia", "El campo No.Documento esta vacio", "Aceptar");
+                return;
             }
 
             bool ValidarDocumento = val.ValidarDocumento(entryIdentificacion);
@@ -253,6 +219,7 @@ namespace DocenteApp
                 await Task.Delay(450);
                 loading.IsVisible = false;
                 await DisplayAlert("Advertencia", "El campo No. Documento debe tener maximo 10 digitos", "Aceptar");
+                return;
             }
             
             if (String.IsNullOrEmpty(entryCodigoEstudiante.Text))
@@ -295,9 +262,8 @@ namespace DocenteApp
                 loading.IsVisible = true;
                 await Task.Delay(500);
                 loading.IsVisible = false;
-                Rectangle dimensiones = paginaPrincipal.Bounds;
-                await paginaPrincipal.TranslateTo(0, 0, 200);
-                IconoBack.IsVisible = true;
+                await Navigation.PushAsync(new MasterPage());
+               
             }
             //ESTO LO PUEDO UTILIZAR CUANDO HAYA UN ERROR EN LOS DATOS EL BOTON SALTE
 

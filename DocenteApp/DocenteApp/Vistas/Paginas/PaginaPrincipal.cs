@@ -8,38 +8,31 @@ using Xamarin.Forms;
 
 namespace DocenteApp
 {
-    public class PaginaPrincipal : ContentView
+    public class PaginaPrincipal : ContentPage
     {
         List<string> MiListaEstudiantil;
         ObservableCollection<string> MiListaEstudiantilDos;
         SearchBar miControlDeBusqueda;
-
         Image Image_Plus;
-        BoxView Barra_Busqueda;
         ListView ListView1;
         Cargando loading;
 
         RelativeLayout ContenedorPrincipal;
-
         StackLayout VistaGeneral;
 
         //gesto
         TapGestureRecognizer ImageTap; //declaramos gesto 
 
-
-
         public PaginaPrincipal()
         {
+            Title = "       Pagina Principal";
             BackgroundColor = Color.White;
-            NavigationPage.SetHasNavigationBar(this, false);  //Barra De Navegación
             CrearVistas();
             AgregarEventos();
             AgregaeVistas();
         }
-
         void CrearVistas()
         {
-
             loading = new Cargando();
 
             MiListaEstudiantil = new List<string>();
@@ -50,7 +43,6 @@ namespace DocenteApp
             MiListaEstudiantilDos.Add("David");
 
             //SearchBar miControlDeBusqueda;
-
             //MiListaEstudiantil.Add(
             //    new Estudiantes
             //        {
@@ -58,21 +50,7 @@ namespace DocenteApp
             //            Documento = 1193236231,
             //            Carrera = "Informatica"
             //        });
-            //MiListaEstudiantil.Add(
-            //    new Estudiantes
-            //        {
-            //            Nombre_Completo = "Jose Hurtado",
-            //            Documento = 011720143,
-            //            Carrera = "Administración"
-            //         });
             ////lista OBSERVABLE COLLECTION
-            //MiListaEstudiantilDos.Add(
-            //   new Estudiantes
-            //   {
-            //       Nombre_Completo = "Miguel Quitiaquez",
-            //       Documento = 1193236231,
-            //       Carrera = "Contaduria"
-            //   });
             //MiListaEstudiantilDos.Add(
             //    new Estudiantes
             //    {
@@ -83,20 +61,14 @@ namespace DocenteApp
 
             miControlDeBusqueda = new SearchBar
             {
-                Placeholder = "Buscar por Nombre"
+                Placeholder = "Agrega tu nombre"
                 //MaxLength = 10  
-            };
-
-            Barra_Busqueda = new BoxView
-            {
-                BackgroundColor = Colores.Color_Navegation
-
             };
 
             Image_Plus = new Image
             {
 
-                Source = Imagenes.plus
+                Source = Core.plus
             };
 
             VistaGeneral = new StackLayout
@@ -107,20 +79,13 @@ namespace DocenteApp
             {
 
             };
-
             ListView1 = new ListView
             {
-
-                BackgroundColor = Color.Blue,
                 ItemsSource = MiListaEstudiantilDos
-
-
             };
 
             ImageTap = new TapGestureRecognizer();
             Image_Plus.GestureRecognizers.Add(ImageTap);
-
-
         }
         private void MiControlDeBusqueda_TextChanged(object sender, TextChangedEventArgs e)  //El sender es el SearchBar
         {
@@ -132,26 +97,24 @@ namespace DocenteApp
         }
         void AgregaeVistas()
         {
-            ContenedorPrincipal.Children.Add(miControlDeBusqueda,
-            Constraint.RelativeToParent((p) => { return p.Width * 0; }),  //X    
-            Constraint.RelativeToParent((p) => { return p.Height * 0.10; })); //Y   
+            VistaGeneral.Children.Add(miControlDeBusqueda);
+
+            ContenedorPrincipal.Children.Add(VistaGeneral,
+            Constraint.RelativeToParent((p) => { return p.Width * 0.10; }),  //X
+            Constraint.RelativeToParent((p) => { return p.Height * 0.031484; }), //Y   21*100/667= 3.1484
+            Constraint.RelativeToParent((p) => { return p.Width * 0.80; }),  //W
+            Constraint.RelativeToParent((p) => { return p.Height * 0.034482; })); //H   
 
             ContenedorPrincipal.Children.Add(ListView1,
             Constraint.RelativeToParent((p) => { return p.Width * 0.025; }),  //X    
-            Constraint.RelativeToParent((p) => { return p.Height * 0.18; }), //Y   
+            Constraint.RelativeToParent((p) => { return p.Height * 0.15; }), //Y   79*100/667 = 11.84 + 3.1484
             Constraint.RelativeToParent((p) => { return p.Width * 0.95; }),  //W
-            Constraint.RelativeToParent((p) => { return p.Height * 0.78; })); //H   
+            Constraint.RelativeToParent((p) => { return p.Height * 0.81; })); //H   
 
             ContenedorPrincipal.Children.Add(Image_Plus,
             Constraint.RelativeToParent((p) => { return p.Width * 0.80; }),  //X    
             Constraint.RelativeToParent((p) => { return p.Height * 0.85; })); //Y   
-
-            ContenedorPrincipal.Children.Add(Barra_Busqueda,
-            Constraint.RelativeToParent((p) => { return p.Width * 0; }),  //X
-            Constraint.RelativeToParent((p) => { return p.Height * 0; }), //Y     //La barra esta en el comienzo de la aplicación
-            Constraint.RelativeToParent((p) => { return p.Width * 1; }),  //W     //Ancho de toda la barra de navegación 375 en FIGMA
-            Constraint.RelativeToParent((p) => { return p.Height * 0.098; })); //H
-
+            
             ContenedorPrincipal.Children.Add(loading,
             Constraint.RelativeToParent((p) => { return 0; }),  //X
             Constraint.RelativeToParent((p) => { return 0; }), //Y     
@@ -175,8 +138,6 @@ namespace DocenteApp
 
         private void ListView1_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-
-
         }
         private void ImageTap_Tapped(object sender, EventArgs e)
         {

@@ -77,7 +77,7 @@ namespace DocenteApp
             ImageBack = new Image
             {
 
-                Source = Imagenes.IconoBack
+                Source = Core.IconoBack
 
             };
 
