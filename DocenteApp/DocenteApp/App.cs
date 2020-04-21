@@ -9,15 +9,24 @@ namespace DocenteApp
 {
     public class App : Application   //"Aplicacion conecta todos los 3 proyectos"
     {
-
+        public static Sesion usuario;
         public static MasterPage _masterPage;
+
         public App()
         {
-            MainPage = new Login();
-            
             _masterPage = new MasterPage();
 
-            MainPage = new NavigationPage(new Login());  ///Para navegar entra páginas
+            if (Core.isLoggeddin() == 1)
+            {
+                usuario = Storage.getSession();
+                MainPage = new NavigationPage(new PaginaPrincipal());
+            }
+            else
+            {
+                MainPage = new NavigationPage(new Login());
+            }
+
         }
+
     }
 }
