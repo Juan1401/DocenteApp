@@ -30,7 +30,6 @@ namespace DocenteApp
             return false;
         }
 
-
         public bool exist(string filename, string path = "")
         {
             var filePath = "";

@@ -23,7 +23,7 @@ namespace DocenteApp
                 catch (Exception e)
                 {
                     Console.WriteLine("Error parsing Session from disk:" + e.Message);
-                    //deleteSession();
+                    //deleteSession();  
                     return null;
                 };
             }

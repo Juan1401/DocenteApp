@@ -14,7 +14,7 @@ namespace DocenteApp
 
         Label labeLBienvenido;
 
-        Entry entryCodigoEstudiante, entryIdentificacion, entryContraseña;
+        Entry entryCodigoProfesor, entryIdentificacion, entryContraseña;
 
         BoxView BoxviewDiseño;
 
@@ -90,9 +90,9 @@ namespace DocenteApp
                 TextColor = Color.FromHex("#FFFFFF")
             };
 
-            entryCodigoEstudiante = new Entry
+            entryCodigoProfesor = new Entry
             {
-                Placeholder = "Código estudiante ",
+                Placeholder = "Código Profesor ",
                 PlaceholderColor = Color.FromHex("#FFFFFF"),
                 Keyboard = Keyboard.Numeric,
                 TextColor = Colores.Color_Textos
@@ -141,7 +141,7 @@ namespace DocenteApp
             VistaGeneral.Children.Add(LogoUTAP);
             VistaGeneral.Children.Add(labeLBienvenido);
             VistaGeneral.Children.Add(entryIdentificacion);
-            VistaGeneral.Children.Add(entryCodigoEstudiante);
+            VistaGeneral.Children.Add(entryCodigoProfesor);
             VistaGeneral.Children.Add(entryContraseña);
             VistaGeneral.Children.Add(BoxviewDiseño);
             VistaGeneral.Children.Add(buttonIniciar);
@@ -222,7 +222,7 @@ namespace DocenteApp
                 return;
             }
             
-            if (String.IsNullOrEmpty(entryCodigoEstudiante.Text))
+            if (String.IsNullOrEmpty(entryCodigoProfesor.Text))
             {
                 loading.IsVisible = true;
                 await Task.Delay(450);
@@ -231,7 +231,7 @@ namespace DocenteApp
                 return;
             }
 
-            bool ValidarDocumento_Nu = val.ValidarDocumento_Nu(entryCodigoEstudiante);
+            bool ValidarDocumento_Nu = val.ValidarDocumento_Nu(entryCodigoProfesor);
             if (ValidarDocumento_Nu) 
             {
                 loading.IsVisible = true;

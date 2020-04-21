@@ -11,6 +11,6 @@ namespace DocenteApp.Interfaces
         bool exist(string filename, string path = "");
         bool delete(string filename, string documentsPath = "");
         string getFullPath();
-
     }
 }
+ 
