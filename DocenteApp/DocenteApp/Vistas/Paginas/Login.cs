@@ -1,26 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace DocenteApp
 {
-
     public class Login : ContentPage
     {
         Image LogoUTAP,ImageBackOlvidoContraseña;
 
-        Label labeLBienvenido;
+        Label labeLBienvenido, labelOlvidoContraseña;
 
-        Entry entryCodigoProfesor, entryIdentificacion, entryContraseña;
+        Entry  entryIdentificacion, entryCodigoProfesor, entryContraseña;
 
-        BoxView BoxviewDiseño;
+        BoxView BoxviewDiseño, Circulo;
 
         Button buttonIniciar;
-
-        Label labelOlvidoContraseña;
 
         Cargando loading;
 
@@ -28,8 +22,6 @@ namespace DocenteApp
          
         //TAREA PUESTA 24-02-2020
         RelativeLayout ContenedorPrincipal;
-
-        BoxView Circulo;
      
         TapGestureRecognizer NavegarOlvidoContra; //declaramos gesto 
 
@@ -47,7 +39,6 @@ namespace DocenteApp
         {
             loading = new Cargando();
 
- 
             ImageBackOlvidoContraseña = new Image
             {
                 Source = Core.IconoBack,
@@ -178,103 +169,111 @@ namespace DocenteApp
 
         private async void NavegarOlvidoContra_Tapped(object sender, EventArgs e)
         {
-
             loading.IsVisible = true;
             await Task.Delay(500);
             loading.IsVisible = false;
             await Navigation.PushAsync(new OlvidoPassword());
         }
 
-
         private async void ButtonIniciar_Clicked(object sender, EventArgs e) //animación del boton 24-02-2020
         {
-            //UInt16 Tiempo = 125;
-            ////ESTO TMABIEN PUEDE IR ACA ARRIBA
-            //await buttonIniciar.ScaleTo(0.95, Tiempo); //cuando el boton es cuando el boton esta en el cero porciento "presionado"
-            //await buttonIniciar.ScaleTo(1, Tiempo); //Aqui va tomar el valor completo del boton 
+            UInt16 Tiempo = 125;
+            await buttonIniciar.ScaleTo(0.95, Tiempo); //cuando el boton es cuando el boton esta en el cero porciento "presionado"
+            await buttonIniciar.ScaleTo(1, Tiempo); //Aqui va tomar el valor completo del boton 
 
+                Validaciones val = new Validaciones();
 
+                if (String.IsNullOrEmpty(entryIdentificacion.Text))
+                {
+                    loading.IsVisible = true;
+                    await Task.Delay(450);
+                    loading.IsVisible = false;
+                    await DisplayAlert("Advertencia", "El campo No.Documento esta vacio", "Aceptar");
+                    return;
+                }
 
-            //bool respuesta = DependencyService.Get<IRestApi>().CreateClients();
-            //if (respuesta)
-            //    await paginaPrincipal.TranslateTo(0, 0, 500);
-            //else
-            //    await DisplayAlert("Notificación", "Problemas para la conexión con el servidor", "Aceptar");
+                bool ValidarDocumento = val.ValidarDocumento(entryIdentificacion);
+                if (!ValidarDocumento)
+                {
+                    loading.IsVisible = true;
+                    await Task.Delay(450);
+                    loading.IsVisible = false;
+                    await DisplayAlert("Advertencia", "El campo No. Documento debe tener maximo 10 digitos", "Aceptar");
+                    return;
+                }
 
-            Validaciones val = new Validaciones();
-         
-            if (String.IsNullOrEmpty(entryIdentificacion.Text))
-            {
-                loading.IsVisible = true;
-                await Task.Delay(450);
-                loading.IsVisible = false;
-                await DisplayAlert("Advertencia", "El campo No.Documento esta vacio", "Aceptar");
-                return;
-            }
+                if (String.IsNullOrEmpty(entryCodigoProfesor.Text))
+                {
+                    loading.IsVisible = true;
+                    await Task.Delay(450);
+                    loading.IsVisible = false;
+                    await DisplayAlert("Advertencia", "El campo Código estudiante esta vacio", "Aceptar");
+                    return;
+                }
 
-            bool ValidarDocumento = val.ValidarDocumento(entryIdentificacion);
-            if (!ValidarDocumento)
-            {
-                loading.IsVisible = true;
-                await Task.Delay(450);
-                loading.IsVisible = false;
-                await DisplayAlert("Advertencia", "El campo No. Documento debe tener maximo 10 digitos", "Aceptar");
-                return;
-            }
-            
-            if (String.IsNullOrEmpty(entryCodigoProfesor.Text))
-            {
-                loading.IsVisible = true;
-                await Task.Delay(450);
-                loading.IsVisible = false;
-                await DisplayAlert("Advertencia", "El campo Código estudiante esta vacio", "Aceptar");
-                return;
-            }
+                bool ValidarDocumento_Nu = val.ValidarDocumento_Nu(entryCodigoProfesor);
+                if (ValidarDocumento_Nu) 
+                {
+                    loading.IsVisible = true;
+                    await Task.Delay(450);
+                    loading.IsVisible = false;
+                    await DisplayAlert("Advertencia", "El campo Código estudiante solo recibe 'Numeros'.", "Aceptar");
+                    return;
+                }
 
-            bool ValidarDocumento_Nu = val.ValidarDocumento_Nu(entryCodigoProfesor);
-            if (ValidarDocumento_Nu) 
-            {
-                loading.IsVisible = true;
-                await Task.Delay(450);
-                loading.IsVisible = false;
-                await DisplayAlert("Advertencia", "El campo Código estudiante solo recibe 'Numeros'.", "Aceptar");
-                return;
-            }
-
-            if (String.IsNullOrEmpty(entryContraseña.Text))
-            {
-                loading.IsVisible = true;
-                await Task.Delay(450);
-                loading.IsVisible = false;
-                await DisplayAlert("Advertencia", "El campo Contraseña esta vacio", "Aceptar");
-                return;
-            }
-            bool ValidarPassword = val.ValidarPassword(entryContraseña);
-            if (!ValidarPassword)
-            {
-                loading.IsVisible = true;
-                await Task.Delay(450);
-                loading.IsVisible = false;
-                await DisplayAlert("Advertencia", "El campo Contraseña debe tener al menos 8 caracteres", "Aceptar");
-                return;
-            }
-            else {
-                loading.IsVisible = true;
-                await Task.Delay(500);
-                loading.IsVisible = false;
-                await Navigation.PushAsync(new MasterPage());
+                if (String.IsNullOrEmpty(entryContraseña.Text))
+                {
+                    loading.IsVisible = true;
+                    await Task.Delay(450);
+                    loading.IsVisible = false;
+                    await DisplayAlert("Advertencia", "El campo Contraseña esta vacio", "Aceptar");
+                    return;
+                }
+                bool ValidarPassword = val.ValidarPassword(entryContraseña);
+                if (!ValidarPassword)
+                {
+                    loading.IsVisible = true;
+                    await Task.Delay(450);
+                    loading.IsVisible = false;
+                    await DisplayAlert("Advertencia", "El campo Contraseña debe tener al menos 8 caracteres", "Aceptar");
+                    return;
+                }
                
+            var respuesta = DependencyService.Get<IRestApi>().LoginApp(entryIdentificacion.Text, entryCodigoProfesor.Text, entryContraseña.Text);
+            if (respuesta.Exitoso == 1)
+            {
+                loading.IsVisible = true;
+                await Task.Delay(450);
+                loading.IsVisible = false;
+                await DisplayAlert("Bienvenido","Sesión Iniciada", "Continuar");
+                await Navigation.PushAsync(new MasterPage()); //NAVEGACIÓN
             }
-            //ESTO LO PUEDO UTILIZAR CUANDO HAYA UN ERROR EN LOS DATOS EL BOTON SALTE
+            else
+            {
+                loading.IsVisible = true;
+                await Task.Delay(450);
+                loading.IsVisible = false;
+                await DisplayAlert("Notificación", "Error las credenciales son incorrectas", "Aceptar");
+            }
 
-            //await buttonIniciar.TranslateTo(20, 0, Tiempo); //mueve x a la izquierda //queda en la posicion original del boton
-            //await buttonIniciar.TranslateTo(0, 0, Tiempo);  //vuelve a la poscion original
-            //await buttonIniciar.TranslateTo(-20, 0, Tiempo); //mueve x a la izquierda //queda en la posicion original del boton
-            //await buttonIniciar.TranslateTo(0, 0, Tiempo);
-        }
-        //ANIMACIÓN
+                //else {
+                //    loading.IsVisible = true;
+                //    await Task.Delay(500);
+                //    loading.IsVisible = false;
+                //    await Navigation.PushAsync(new MasterPage());
 
-        async Task AnimationInicial()  //Para dar un tiempo de espera
+                //}
+
+                ////ESTO LO PUEDO UTILIZAR CUANDO HAYA UN ERROR EN LOS DATOS EL BOTON SALTE
+
+                //await buttonIniciar.TranslateTo(20, 0, Tiempo); //mueve x a la izquierda //queda en la posicion original del boton
+                //await buttonIniciar.TranslateTo(0, 0, Tiempo);  //vuelve a la poscion original
+                //await buttonIniciar.TranslateTo(-20, 0, Tiempo); //mueve x a la izquierda //queda en la posicion original del boton
+                //await buttonIniciar.TranslateTo(0, 0, Tiempo);
+            }
+            //ANIMACIÓN
+
+            async Task AnimationInicial()  //Para dar un tiempo de espera
         {
             UInt16 Tiempo = 500;
 
