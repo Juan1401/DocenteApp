@@ -18,8 +18,7 @@ namespace DocenteApp
 
         Cargando loading;
 
-        StackLayout VistaGeneral;
-         
+        StackLayout VistaGeneral;  
         //TAREA PUESTA 24-02-2020
         RelativeLayout ContenedorPrincipal;
      
@@ -238,7 +237,7 @@ namespace DocenteApp
                     await DisplayAlert("Advertencia", "El campo Contraseña debe tener al menos 8 caracteres", "Aceptar");
                     return;
                 }
-               
+                
             var respuesta = DependencyService.Get<IRestApi>().LoginApp(entryIdentificacion.Text, entryCodigoProfesor.Text, entryContraseña.Text);
             if (respuesta.Exitoso == 1)
             {
@@ -255,14 +254,6 @@ namespace DocenteApp
                 loading.IsVisible = false;
                 await DisplayAlert("Notificación", "Error las credenciales son incorrectas", "Aceptar");
             }
-
-                //else {
-                //    loading.IsVisible = true;
-                //    await Task.Delay(500);
-                //    loading.IsVisible = false;
-                //    await Navigation.PushAsync(new MasterPage());
-
-                //}
 
                 ////ESTO LO PUEDO UTILIZAR CUANDO HAYA UN ERROR EN LOS DATOS EL BOTON SALTE
 

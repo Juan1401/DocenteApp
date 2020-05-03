@@ -11,20 +11,15 @@ namespace DocenteApp
     {
         Image ImageBack;
         Entry CorreoRecuperacion;
-        BoxView BoxViewCorreo;
-        BoxView BoxViewNavegation;
-
+        BoxView BoxViewNavegation, BoxViewCorreo;
         Cargando loading;
-
         Button ButtonRecuperar;
-
 
         StackLayout VistaGeneral;
         RelativeLayout ContenedorPrincipal;
 
-        TapGestureRecognizer tabButtonRecuperar;
-        TapGestureRecognizer tabIconBack;
-
+        TapGestureRecognizer tabButtonRecuperar, tabIconBack;
+        
         public OlvidoPassword()
         {
             NavigationPage.SetHasNavigationBar(this, false);
@@ -87,7 +82,6 @@ namespace DocenteApp
             tabIconBack = new TapGestureRecognizer();
             ImageBack.GestureRecognizers.Add(tabIconBack);
         }
-
         void AgregarVistas()
         {
             //Declarlos en el orden en que quiero que aparezca 
@@ -119,8 +113,7 @@ namespace DocenteApp
             Constraint.RelativeToParent((p) => { return p.Width; }),  //W   
             Constraint.RelativeToParent((p) => { return p.Height; })); //H
 
-            Content = ContenedorPrincipal;
-            
+            Content = ContenedorPrincipal;   
         }
 
         void AgregarEventos()
@@ -128,7 +121,6 @@ namespace DocenteApp
             ButtonRecuperar.Clicked += ButtonRecuperar_Clicked;
             tabButtonRecuperar.Tapped += TabButtonRecuperar_Tapped;
             tabIconBack.Tapped += TabIconBack_Tapped;
-
         }
 
         private async void TabIconBack_Tapped(object sender, EventArgs e)
@@ -144,7 +136,6 @@ namespace DocenteApp
         private async void ButtonRecuperar_Clicked(object sender, EventArgs e)
         {
             Validaciones val = new Validaciones();
-
             if (String.IsNullOrEmpty(CorreoRecuperacion.Text))
             {
                 loading.IsVisible = true;
@@ -162,7 +153,6 @@ namespace DocenteApp
                 await DisplayAlert("Advertencia", "El campo Correo no es una dirrección Valida", "Aceptar");
                 return;
             }
-
             if (!CorreoRecuperacion.Text.Contains("@"))
             {
                 loading.IsVisible = true;
@@ -179,13 +169,21 @@ namespace DocenteApp
                 await DisplayAlert("Advertencia", "El campo Correo no contiene una dirección valida, falta el '.' ", "Aceptar");
                 return;
             }
+            var respuesta = DependencyService.Get<IRestApiForgot>().Forgot(CorreoRecuperacion.Text);
+            if (respuesta.Exitoso == 1)
+            {
+                loading.IsVisible = true;
+                await Task.Delay(450);
+                loading.IsVisible = false;
+                await DisplayAlert("Confirmación", "Se ha enviado un correo de Recuperación", "Aceptar");
+                await Navigation.PushAsync(new Login());
+            }
             else
             {
                 loading.IsVisible = true;
-                await Task.Delay(500);
+                await Task.Delay(450);
                 loading.IsVisible = false;
-                await DisplayAlert("Confirmación", "Se ha enviado un correo de Recuperación", "Aceptar");
-           
+                await DisplayAlert("Notificación", "Hubo un error en el Envio", "Aceptar");
                 return;
             }
         }

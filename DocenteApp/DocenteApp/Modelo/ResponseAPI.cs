@@ -8,5 +8,7 @@ namespace DocenteApp.Modelo  //TRAER LOS DATOS DEL API EN EL MODELO
     {
         public int Exitoso { get; set; }
 
+        public int OK { get; set; }
+
     }
 }
