@@ -12,5 +12,9 @@ namespace DocenteApp
         public static Color Color_TextosSecundario { get; } = Color.FromHex("#000000");
         public static Color Color_Primario { get; } = Color.FromHex("#000000");
         public static Color Color_Titulos { get; } = Color.FromHex("#FFFFFF");
+
+        public static Color Color_Nota { get; } = Color.FromHex("#17A8E5");
+
+
     }
 }

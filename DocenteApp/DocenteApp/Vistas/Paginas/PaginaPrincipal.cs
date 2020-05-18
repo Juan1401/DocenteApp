@@ -11,11 +11,17 @@ namespace DocenteApp
     public class PaginaPrincipal : ContentPage
     {
         List<string> MiListaEstudiantil;
-        ObservableCollection<string> MiListaEstudiantilDos;
+
+        ObservableCollection<Profesor> MiListaEstudiantilDos;
+        ListView ListView2;
+
         SearchBar miControlDeBusqueda;
         Image Image_Plus;
         ListView ListView1;
         Cargando loading;
+
+        BoxView boxView;
+        Picker picker;
 
         RelativeLayout ContenedorPrincipal;
         StackLayout VistaGeneral;
@@ -36,11 +42,56 @@ namespace DocenteApp
             loading = new Cargando();
 
             MiListaEstudiantil = new List<string>();
-            MiListaEstudiantilDos = new ObservableCollection<string>();
 
-            MiListaEstudiantilDos.Add("Juan");
-            MiListaEstudiantilDos.Add("Carlos");
-            MiListaEstudiantilDos.Add("David");
+
+            MiListaEstudiantilDos = new ObservableCollection<Profesor>
+            {
+              new Profesor {Nombre ="Roney Rodriguez", Materia = "Electiva II" , Docente = "Docente: Roney Rodriguez", Nota = "4.3", NotaVisible = true },
+              new Profesor {Nombre ="Roney Rodriguez", Materia = "POII" , Docente = "Docente: Roney Rodriguez", Nota = "4.5", NotaVisible = true },
+              new Profesor {Nombre ="Roney Rodriguez", Materia = "Desarrollo Web" , Docente = "Docente: Roney Rodriguez", Nota = "3.7", NotaVisible = true }
+            
+            };
+
+            ListView2 = new ListView   //listView
+            {
+                ItemsSource = MiListaEstudiantilDos,
+                ItemTemplate = new DataTemplate(typeof(ListProfesor)),
+                SeparatorVisibility = SeparatorVisibility.Default,
+                RowHeight = 85,
+            };
+
+       
+
+            Dictionary<string, Color> nameToColor = new Dictionary<string, Color>
+        {
+            { "Aqua", Color.Aqua }, { "Black", Color.Black },
+            { "Gray", Color.Gray }, { "Green", Color.Green },
+            { "Lime", Color.Lime }, { "Maroon", Color.Maroon },
+            { "Navy", Color.Navy }, { "Olive", Color.Olive },
+            { "Purple", Color.Purple }, { "Red", Color.Red },
+            { "Silver", Color.Silver }, { "Teal", Color.Teal },
+            { "White", Color.White }, { "Yellow", Color.Yellow }
+        };
+
+            picker = new Picker
+            {
+                Title = "Color",
+                VerticalOptions = LayoutOptions.CenterAndExpand
+            };
+
+            foreach (string colorName in nameToColor.Keys)
+            {
+                picker.Items.Add(colorName);
+            }
+
+            // Create BoxView for displaying picked Color
+            boxView = new BoxView
+            {
+                WidthRequest = 150,
+                HeightRequest = 150,
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.CenterAndExpand
+            };
 
             //SearchBar miControlDeBusqueda;
             //MiListaEstudiantil.Add(
@@ -61,7 +112,8 @@ namespace DocenteApp
 
             miControlDeBusqueda = new SearchBar
             {
-                Placeholder = "Agrega tu nombre"
+                Placeholder = "Agrega tu nombre",
+                VerticalOptions = LayoutOptions.CenterAndExpand
                 //MaxLength = 10  
             };
 
@@ -98,23 +150,25 @@ namespace DocenteApp
         void AgregaeVistas()
         {
             VistaGeneral.Children.Add(miControlDeBusqueda);
+            VistaGeneral.Children.Add(picker);
+            VistaGeneral.Children.Add(boxView);
 
             ContenedorPrincipal.Children.Add(VistaGeneral,
-            Constraint.RelativeToParent((p) => { return p.Width * 0.10; }),  //X
-            Constraint.RelativeToParent((p) => { return p.Height * 0.031484; }), //Y   21*100/667= 3.1484
-            Constraint.RelativeToParent((p) => { return p.Width * 0.80; }),  //W
-            Constraint.RelativeToParent((p) => { return p.Height * 0.034482; })); //H   
+            Constraint.RelativeToParent((p) => { return p.Width * 0.15; }),  //X
+            Constraint.RelativeToParent((p) => { return p.Height * 0.01; }), //Y   97-76=21   (21*100/667= 3.1484)
+            Constraint.RelativeToParent((p) => { return p.Width * 0.70; }),  //W
+            Constraint.RelativeToParent((p) => { return p.Height * 0.01402; })); //H   
 
-            ContenedorPrincipal.Children.Add(ListView1,
-            Constraint.RelativeToParent((p) => { return p.Width * 0.025; }),  //X    
-            Constraint.RelativeToParent((p) => { return p.Height * 0.15; }), //Y   79*100/667 = 11.84 + 3.1484
-            Constraint.RelativeToParent((p) => { return p.Width * 0.95; }),  //W
+            ContenedorPrincipal.Children.Add(ListView2,
+            Constraint.RelativeToParent((p) => { return p.Width * 0.05; }),  //X    
+            Constraint.RelativeToParent((p) => { return p.Height * 0.22; }), //Y   79*100 /667 = 11.84 + 3.1484 = 0.25;
+            Constraint.RelativeToParent((p) => { return p.Width * 0.90; }),  //W
             Constraint.RelativeToParent((p) => { return p.Height * 0.81; })); //H   
 
             ContenedorPrincipal.Children.Add(Image_Plus,
             Constraint.RelativeToParent((p) => { return p.Width * 0.80; }),  //X    
             Constraint.RelativeToParent((p) => { return p.Height * 0.85; })); //Y   
-            
+
             ContenedorPrincipal.Children.Add(loading,
             Constraint.RelativeToParent((p) => { return 0; }),  //X
             Constraint.RelativeToParent((p) => { return 0; }), //Y     
@@ -129,6 +183,26 @@ namespace DocenteApp
             miControlDeBusqueda.TextChanged += MiControlDeBusqueda_TextChanged;
             ImageTap.Tapped += ImageTap_Tapped; //presionamos tap tap y enter
             ListView1.ItemSelected += ListView1_ItemSelected;
+            ListView2.ItemSelected += ListView2_ItemSelected;
+            picker.SelectedIndexChanged += Picker_SelectedIndexChanged;            
+        }
+
+        private void ListView2_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            ((ListView)sender).SelectedItem = null;
+        }
+
+        public void Picker_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (picker.SelectedIndex == -1)
+            {
+                boxView.Color = Color.Default;
+            }
+            else
+            {
+                string colorName = picker.Items[picker.SelectedIndex];
+                boxView.Color = Colores.Color_Navegation;
+            }
         }
 
         private void ListView1_ItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -149,16 +223,16 @@ namespace DocenteApp
             uint tiempo = 200;
             await control.ScaleTo(0.85, tiempo); //cuando el boton es cuando el boton esta en el cero porciento "presionado"
             await control.ScaleTo(1, tiempo); //Aqui va tomar el valor completo del boton 
-            if (string.IsNullOrEmpty(miControlDeBusqueda.Text))
-            {
-                await App.Current.MainPage.DisplayAlert("Notificación ", "Debes escribir un estudiante", "Aceptar");
-                return;
-            }
-            loading.IsVisible = true;
-            await Task.Delay(1000);
-            loading.IsVisible = false;
-            MiListaEstudiantilDos.Add(miControlDeBusqueda.Text);
-            miControlDeBusqueda.Text = string.Empty;
+            //if (string.IsNullOrEmpty(miControlDeBusqueda.Text))
+            //{
+            //    await App.Current.MainPage.DisplayAlert("Notificación ", "Debes escribir un estudiante", "Aceptar");
+            //    return;
+            //}
+            //loading.IsVisible = true;
+            //await Task.Delay(1000);
+            //loading.IsVisible = false;
+            //MiListaEstudiantilDos.Add(miControlDeBusqueda.Text);
+            //miControlDeBusqueda.Text = string.Empty;
         }
     }
 }
