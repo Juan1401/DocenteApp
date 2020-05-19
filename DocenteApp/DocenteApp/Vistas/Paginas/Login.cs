@@ -238,15 +238,24 @@ namespace DocenteApp
                 return;
             }
 
-            //var respuesta = DependencyService.Get<IRestApi>().LoginApp(entryIdentificacion.Text, entryCodigoProfesor.Text, entryContraseña.Text);
-            //if (respuesta.Exitoso == 1)
-            //{
-            //    loading.IsVisible = true;
-            //    await Task.Delay(450);
-            //    loading.IsVisible = false;
-            //    await DisplayAlert("Bienvenido", "Sesión Iniciada", "Continuar");
-            //    await Navigation.PushAsync(new MasterPage()); //NAVEGACIÓN
-            //}
+            var respuesta = DependencyService.Get<IRestApi>().LoginApp(entryIdentificacion.Text, entryCodigoProfesor.Text, entryContraseña.Text);
+            if (respuesta.Exitoso == 1)
+            {
+                loading.IsVisible = true;
+                await Task.Delay(450);
+                loading.IsVisible = false;
+                await DisplayAlert("Bienvenido", "Sesión Iniciada", "Continuar");
+               
+                Storage.saveSession(new Sesion
+                {
+                    Nombre = "Juan Jose1",
+                    Codigo_Estudiante = "011720143",
+                    Password = "123456"
+                });
+
+                await Navigation.PushAsync(new MasterPage()); //NAVEGACIÓN
+
+            }
 
             else
             {
@@ -254,8 +263,20 @@ namespace DocenteApp
                 await Task.Delay(450);
                 loading.IsVisible = false;
                 await DisplayAlert("Notificación", "Error las credenciales son incorrectas", "Aceptar");
-                await Navigation.PushAsync(new MasterPage()); //NAVEGACIÓN
+                //await Navigation.PushAsync(new MasterPage()); //NAVEGACIÓN
             }
+
+       
+            //Storage.saveSession(new Sesion
+            //{
+            //    Nombre = "Juan Jose",
+            //    Codigo_Estudiante = "011720143",
+            //    Password = "123456"
+            //});
+
+            //await Navigation.PushAsync(new MasterPage()); //NAVEGACIÓN
+
+
 
             ////ESTO LO PUEDO UTILIZAR CUANDO HAYA UN ERROR EN LOS DATOS EL BOTON SALTE
 

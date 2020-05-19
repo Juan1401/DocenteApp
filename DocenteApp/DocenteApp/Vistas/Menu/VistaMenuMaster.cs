@@ -92,6 +92,7 @@ namespace DocenteApp
                 case "Listado estudiantes":
                     break;
                 case "Cerrar Sesión":
+                    Storage.deleteSession();//Se elimina la session
                     await Navigation.PushAsync(new Login());
                     break;
 

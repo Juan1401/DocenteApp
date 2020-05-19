@@ -19,7 +19,7 @@ namespace DocenteApp
             if (Core.isLoggeddin() == 1)
             {
                 usuario = Storage.getSession();
-                MainPage = new NavigationPage(new PaginaPrincipal());
+                MainPage = new NavigationPage(new MasterPage());
             }
             else
             {

@@ -35,12 +35,18 @@ namespace DocenteApp
         }
 
         public static void saveSession(Sesion session)
-        { 
+        {
+
+            var sessionJson = JsonConvert.SerializeObject(session);
+            DependencyService.Get<IFileManager>().SaveText(Core.nombre_archivo_sesion, sessionJson);
+            Console.WriteLine("Session Saved: id" + session.Codigo_Estudiante);
 
         }
         public static void deleteSession() 
-        {        
-        
+        {
+            var deleted = DependencyService.Get<IFileManager>().delete(Core.nombre_archivo_sesion);
+            Console.WriteLine("Session, stored Deleted:" + deleted);
+
         }
     }
 }

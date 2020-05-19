@@ -10,6 +10,8 @@ namespace DocenteApp
 {
     public class PaginaPrincipal : ContentPage
     {
+
+        List<Materia> MATERIAS;
         List<string> MiListaEstudiantil;
 
         ObservableCollection<Profesor> MiListaEstudiantilDos;
@@ -20,7 +22,6 @@ namespace DocenteApp
         ListView ListView1;
         Cargando loading;
 
-        BoxView boxView;
         Picker picker;
 
         RelativeLayout ContenedorPrincipal;
@@ -43,7 +44,6 @@ namespace DocenteApp
 
             MiListaEstudiantil = new List<string>();
 
-
             MiListaEstudiantilDos = new ObservableCollection<Profesor>
             {
               new Profesor {Nombre ="Roney Rodriguez", Materia = "Electiva II" , Docente = "Docente: Roney Rodriguez", Nota = "4.3", NotaVisible = true },
@@ -60,38 +60,20 @@ namespace DocenteApp
                 RowHeight = 85,
             };
 
-       
-
-            Dictionary<string, Color> nameToColor = new Dictionary<string, Color>
-        {
-            { "Aqua", Color.Aqua }, { "Black", Color.Black },
-            { "Gray", Color.Gray }, { "Green", Color.Green },
-            { "Lime", Color.Lime }, { "Maroon", Color.Maroon },
-            { "Navy", Color.Navy }, { "Olive", Color.Olive },
-            { "Purple", Color.Purple }, { "Red", Color.Red },
-            { "Silver", Color.Silver }, { "Teal", Color.Teal },
-            { "White", Color.White }, { "Yellow", Color.Yellow }
-        };
-
             picker = new Picker
             {
-                Title = "Color",
-                VerticalOptions = LayoutOptions.CenterAndExpand
+                Title = "Materia",
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                ItemsSource = MATERIAS
             };
 
-            foreach (string colorName in nameToColor.Keys)
+            MATERIAS = new List<Materia>
             {
-                picker.Items.Add(colorName);
-            }
+            new Materia {Materias = "Programaciòn 1"},
+            new Materia {Materias = "Programaciòn 2"},
+            new Materia {Materias = "Desarrollo Movil"},
 
-            // Create BoxView for displaying picked Color
-            boxView = new BoxView
-            {
-                WidthRequest = 150,
-                HeightRequest = 150,
-                HorizontalOptions = LayoutOptions.Center,
-                VerticalOptions = LayoutOptions.CenterAndExpand
-            };
+             };
 
             //SearchBar miControlDeBusqueda;
             //MiListaEstudiantil.Add(
@@ -151,8 +133,7 @@ namespace DocenteApp
         {
             VistaGeneral.Children.Add(miControlDeBusqueda);
             VistaGeneral.Children.Add(picker);
-            VistaGeneral.Children.Add(boxView);
-
+ 
             ContenedorPrincipal.Children.Add(VistaGeneral,
             Constraint.RelativeToParent((p) => { return p.Width * 0.15; }),  //X
             Constraint.RelativeToParent((p) => { return p.Height * 0.01; }), //Y   97-76=21   (21*100/667= 3.1484)
@@ -184,27 +165,13 @@ namespace DocenteApp
             ImageTap.Tapped += ImageTap_Tapped; //presionamos tap tap y enter
             ListView1.ItemSelected += ListView1_ItemSelected;
             ListView2.ItemSelected += ListView2_ItemSelected;
-            picker.SelectedIndexChanged += Picker_SelectedIndexChanged;            
         }
 
+     
         private void ListView2_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             ((ListView)sender).SelectedItem = null;
         }
-
-        public void Picker_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (picker.SelectedIndex == -1)
-            {
-                boxView.Color = Color.Default;
-            }
-            else
-            {
-                string colorName = picker.Items[picker.SelectedIndex];
-                boxView.Color = Colores.Color_Navegation;
-            }
-        }
-
         private void ListView1_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             ((ListView)sender).SelectedItem = null;
@@ -223,6 +190,7 @@ namespace DocenteApp
             uint tiempo = 200;
             await control.ScaleTo(0.85, tiempo); //cuando el boton es cuando el boton esta en el cero porciento "presionado"
             await control.ScaleTo(1, tiempo); //Aqui va tomar el valor completo del boton 
+
             //if (string.IsNullOrEmpty(miControlDeBusqueda.Text))
             //{
             //    await App.Current.MainPage.DisplayAlert("Notificación ", "Debes escribir un estudiante", "Aceptar");

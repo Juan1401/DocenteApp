@@ -11,7 +11,7 @@ namespace DocenteApp
         
         public string Codigo_Estudiante { get; set; }
         
-        public string Correo_Institucional { get; set; }
+        public string Password { get; set; }
 
     }
 }
